@@ -40,6 +40,64 @@ public class Q1 {
     }
 }
 
+class Node implements Comparable<String> {
+    Character data;
+    Node left, right;
+
+    public Node() {
+    }
+
+    public Node(Character data) {
+        this.data = data;
+        this.left = null;
+        this.right = null;
+    }
+
+    @Override
+    public int compareTo(String name) {
+        return name.compareTo(this.data.getName());
+    }
+}
+
+class Tree {
+    Node root;
+
+    public void add(Character character) {
+        root = add(character, root);
+    }
+
+    private Node add(Character character, Node node) {
+        if (node == null)
+            return new Node(character);
+        else if (node.compareTo(character.getName()) < 0)
+            node.left = add(character, node.left);
+        else if (node.compareTo(character.getName()) > 0)
+            node.right = add(character, node.right);
+        else
+            throw new IllegalArgumentException("Duplicated character " + character);
+        return node;
+    }
+
+    public String traceSearchPath(String name) {
+        var sb = new StringBuilder(name + " => ");
+        if (root != null)
+            sb.append("raiz ");
+        return traceSearchPath(name, sb, root);
+    }
+
+    private String traceSearchPath(String name, StringBuilder sb, Node node) {
+        if (node == null)
+            return sb.append("NAO").toString();
+        else if (node.compareTo(name) == 0) 
+            return sb.append("SIM").toString();
+
+        if (node.compareTo(name) < 0)
+            return traceSearchPath(name, sb.append("esq "), node.left);
+        else
+            return traceSearchPath(name, sb.append("dir "), node.right);
+    }
+}
+
 class Character implements Cloneable, Comparable<Character> {
     private String id;
     private String name;
@@ -335,60 +393,3 @@ class Character implements Cloneable, Comparable<Character> {
     }
 }
 
-class Node implements Comparable<String> {
-    Character data;
-    Node left, right;
-
-    public Node() {
-    }
-
-    public Node(Character data) {
-        this.data = data;
-        this.left = null;
-        this.right = null;
-    }
-
-    @Override
-    public int compareTo(String name) {
-        return name.compareTo(this.data.getName());
-    }
-}
-
-class Tree {
-    Node root;
-
-    public void add(Character character) {
-        root = add(character, root);
-    }
-
-    private Node add(Character character, Node node) {
-        if (node == null)
-            return new Node(character);
-        else if (node.compareTo(character.getName()) < 0)
-            node.left = add(character, node.left);
-        else if (node.compareTo(character.getName()) > 0)
-            node.right = add(character, node.right);
-        else
-            throw new IllegalArgumentException("Duplicated character " + character);
-        return node;
-    }
-
-    public String traceSearchPath(String name) {
-        var sb = new StringBuilder(name + " => ");
-        if (root != null)
-            sb.append("raiz ");
-        return traceSearchPath(name, sb, root);
-    }
-
-    private String traceSearchPath(String name, StringBuilder sb, Node node) {
-        if (node == null)
-            return sb.append("NAO").toString();
-        else if (node.compareTo(name) == 0) 
-            return sb.append("SIM").toString();
-
-        if (node.compareTo(name) < 0)
-            return traceSearchPath(name, sb.append("esq "), node.left);
-        else
-            return traceSearchPath(name, sb.append("dir "), node.right);
-    }
-}
